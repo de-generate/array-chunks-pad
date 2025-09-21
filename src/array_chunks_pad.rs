@@ -31,33 +31,23 @@ where
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(iter) = &mut self.iter {
-            match iter.next() {
-                None => {
-                    let mut remainder = self
-                        .iter
-                        .take()
-                        .unwrap()
-                        .into_remainder()
-                        .unwrap()
-                        .peekable();
+        match self.iter.as_mut()?.next() {
+            None => {
+                let mut remainder = self.iter.take().unwrap().into_remainder()?.peekable();
 
-                    if remainder.peek().is_some() {
-                        let mut result = [self.filler; N];
+                if remainder.peek().is_some() {
+                    let mut result = [self.filler; N];
 
-                        for (i, remains) in remainder.enumerate() {
-                            result[i] = remains;
-                        }
-
-                        Some(result)
-                    } else {
-                        None
+                    for (i, remains) in remainder.enumerate() {
+                        result[i] = remains;
                     }
+
+                    Some(result)
+                } else {
+                    None
                 }
-                el => el,
             }
-        } else {
-            None
+            el => el,
         }
     }
 }
