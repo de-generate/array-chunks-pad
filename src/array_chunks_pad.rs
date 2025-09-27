@@ -38,8 +38,8 @@ where
                 if remainder.peek().is_some() {
                     let mut result = [self.filler; N];
 
-                    for (i, remains) in remainder.enumerate() {
-                        result[i] = remains;
+                    for (result, remainder) in result.iter_mut().zip(remainder) {
+                        *result = remainder;
                     }
 
                     Some(result)
